@@ -302,7 +302,9 @@ def req_5(data_structs, nom_ciudad, f_inicial, f_final):
     Función que soluciona el requerimiento 5
     """
     
-    general=0
+    ofertas_ciudad_y_periodo=0
+    
+    
     dict_company_name={}
     listado_ofertas=lt.newList("ARRAY_LIST")
     
@@ -310,14 +312,20 @@ def req_5(data_structs, nom_ciudad, f_inicial, f_final):
         oferta_valida=cmp_fechas(f_inicial, oferta, f_final)
         if oferta_valida!=None:
             if oferta["city"]==nom_ciudad:
-                general +=1
+                ofertas_ciudad_y_periodo +=1
                 dict_company_name[oferta["company_name"]]+=1
                 lt.addLast(listado_ofertas, oferta)
+    
                 
     llave_menor=min(dict_company_name, key=lambda k:dict_company_name[k])
     llave_mayor=max(dict_company_name, key=lambda k:dict_company_name[k])
     valor_menor=dict_company_name["llave_menor"]
     valor_mayor=dict_company_name["llave_mayor"]
+    
+    empresas_ciudad=len(dict_company_name)
+    return ofertas_ciudad_y_periodo, empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor
+    
+    
         
     
     
