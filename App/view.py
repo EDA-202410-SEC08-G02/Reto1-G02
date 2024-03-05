@@ -145,8 +145,8 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     Función que imprime la solución del Requerimiento 4 en consola
     """
-    tupla_lista_ofertas_pais = control.req_4(codigo_pais, fecha_inicial, fecha_final)
-    total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada = tupla_lista_ofertas_pais
+    data= control.req_4(codigo_pais, fecha_inicial, fecha_final)
+    total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada = data
 
     print("Total de ofertas en el país en el periodo de consulta:", total_ofertas)
     print("Total de empresas que publicaron al menos una oferta:", total_empresas)

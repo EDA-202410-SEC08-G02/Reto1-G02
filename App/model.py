@@ -261,18 +261,22 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
-    data = pd.concat((pd.read_csv(f) for f in data_structs), ignore_index=True)
-    data_filtrada = data[(data['country_code'] == codigo_pais) and (data['published_at'] >= fecha_inicial) and (data['published_at'] <= fecha_final)]
-
-    total_ofertas = len(data_filtrada)
-    total_empresas = data_filtrada['company_name'].nunique()
-    total_ciudades = data_filtrada['city'].nunique()
-    ciudad_mas_ofertas = data_filtrada['city'].value_counts().idxmax()
-    conteo_ciudad_mas_ofertas = data_filtrada['city'].value_counts().max()
-    ciudad_menos_ofertas = data_filtrada['city'].value_counts().idxmin()
-    conteo_ciudad_menos_ofertas = data_filtrada['city'].value_counts().min()
-    data_ordenada = data_filtrada.sort_values(by=['published_at', 'company_name'])
-    return total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas
+    data = {}
+    for file_path in data_structs:
+        df = pd.read_csv(file_path)
+        for index, fila in df.iterrows():
+            if fila['country_code'] == codigo_pais and fila['published_at'] >= fecha_inicial and fila['published_at'] <= fecha_final:
+                data[fila['id']] = fila
+    
+    total_ofertas = len(data)
+    total_empresas = len(data.keys())
+    total_ciudades = len(data.values())
+    ciudad_mas_ofertas = max(data.values(), key=lambda x: len(x))
+    conteo_ciudad_mas_ofertas = len(ciudad_mas_ofertas)
+    ciudad_menos_ofertas = min(data.values(), key=lambda x: len(x))
+    conteo_ciudad_menos_ofertas = len(ciudad_menos_ofertas)
+    data_ordenada = sorted(data.values(), key=lambda x: (x['published_at'], x['company_name']))
+    return total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada
 
 
 def req_5(data_structs):

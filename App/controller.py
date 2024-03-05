@@ -138,13 +138,9 @@ def req_4(control, codigo_pais, fecha_inicial, fecha_final ):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
-    codigo_pais = "PL"
-    fecha_final = "2022-04-12"
-    fecha_final = "2022-04-30"
-    
     data_structs = control["model"]
-    tupla_lista_ofertas_pais = model.req_4(data_structs,codigo_pais,fecha_inicial,fecha_final )
-    return tupla_lista_ofertas_pais
+    data = model.req_4(data_structs,codigo_pais,fecha_inicial,fecha_final )
+    return data
 
 def req_5(control):
     """
