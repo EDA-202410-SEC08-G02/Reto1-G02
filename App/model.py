@@ -263,7 +263,7 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     # TODO: Realizar el requerimiento 4
     archivos_csv = glob.glob("*.csv")
     data = pd.concat((pd.read_csv(f) for f in archivos_csv), ignore_index=True)
-    data_filtrada = data[(data['country_code'] == codigo_pais) & (data['published_at'] >= fecha_inicial) & (data['published_at'] <= fecha_final)]
+    data_filtrada = data[(data['country_code'] == codigo_pais) and (data['published_at'] >= fecha_inicial) and (data['published_at'] <= fecha_final)]
 
     total_ofertas = len(data_filtrada)
     total_empresas = data_filtrada['company_name'].nunique()
