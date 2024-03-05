@@ -24,7 +24,8 @@
  * Dario Correal - Version inicial
  """
 
-
+import random
+from datetime import datetime
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack as st
@@ -92,7 +93,7 @@ def add_multilocation(data_structs, multilocation):
 
 # Funciones para creacion de datos
 
-def new_job(title,street,city,country_code,address_text,marker_icon,workplace_type,company_name,company_url,company_size,
+def new_job(data_structs, title,street,city,country_code,address_text,marker_icon,workplace_type,company_name,company_url,company_size,
             experience_level,published_at,remote_interview,open_to_hire_ukrainians,id,display_offer):
     """
     Crea un nuevo elemento job
@@ -130,9 +131,10 @@ def new_job(title,street,city,country_code,address_text,marker_icon,workplace_ty
     job['open_to_hire_ukrainians'] = open_to_hire_ukrainians
     job['id'] = id
     job['display_offer'] = display_offer
+    
     return job
 
-def new_skill(field, level, title):
+def new_skill(data_structs, field, level, title):
     """
     Crea un nuevo elemento skill
     """
@@ -143,6 +145,7 @@ def new_skill(field, level, title):
     skill['field'] = field
     skill['level'] = level
     skill['title'] = title
+    
     return skill
 
 def new_employment_type(type, title, currency, min_salary, max_salary):
@@ -177,13 +180,34 @@ def new_multilocation(location, city, title):
 
 # Funciones de consulta
 
+def add_Data(data_structs, data):
+    """
+    Función para agregar nuevos elementos a la lista
+    """
+    #TODO: Crear la función para agregar elementos a una lista
+    
+    return lt.addLast(data_structs, data)
 
-def get_data(data_structs, id):
+def obtener_un_dato(lista,indice):
     """
     Retorna un dato a partir de su ID
     """
-    #TODO: Crear la función para obtener un dato de una lista
-    pass
+    return lt.getElement(lista,indice)
+
+def get_data(data_structs):
+    """
+    Retorna un dato a partir de su ID
+    """
+    resultados = lt.newList("ARRAY_LIST")
+    tamano= int(lt.size(data_structs))
+    lt.addFirst(resultados,lt.firstElement(data_structs))
+    for b in range(2,4):
+        p = obtener_un_dato(data_structs, b)
+        add_Data(resultados, p)
+    for b in range (0,3):
+        p = obtener_un_dato(data_structs, (tamano-b))
+        add_Data(resultados, p)
+    return resultados
 
 def job_size(data_structs):
     """
@@ -213,13 +237,37 @@ def multilocation_size(data_structs):
     size = lt.size(data_structs['multilocations'])
     return size
 
-def req_2(data_structs):
+def organizar_lista(list,cmp, alg=sa):
+    if alg == "Selection":
+        alg = se
+    elif alg == "Insertion":
+        alg = ins
+    elif alg == "Shell":
+        alg = sa
+    else:
+        alg = sa
+    return alg.sort(list,cmp)
+
+def cmp_fecha(dato1,dato2):
+    
+    if dato1["published_at"] > dato2["published_at"]:
+        return True
+    elif dato1["published_at"] < dato2["published_at"]:
+        return False 
+    
+        
+
+
+def req_2(data_structs,  ciudad, nombre_empresa):
     """
     Función que soluciona el requerimiento 2
     """
-    # TODO: Realizar el requerimiento 2
-    pass
-
+    ofertas=data_structs["jobs"]
+    of_empresa_y_ciudad=lt.newList["ARRAYLIST"]
+    for g in lt.iterator(ofertas):
+        if g["company_name"]==nombre_empresa and g["city"]==ciudad:
+            lt.addLast(of_empresa_y_ciudad, {"published_at":g["published_at"], "country_code":g["country_code"], "city":g["city"], "company_name":g["company_name"], "title":g["title"], "experience_level":g["experience_level"], "workplace_type":g["workplace_type"], "address_text":g["address_text"]})
+    return of_empresa_y_ciudad
 
 def req_3(data_structs):
     """
@@ -237,20 +285,77 @@ def req_4(data_structs):
     pass
 
 
-def req_5(data_structs):
+def cmp_fechas(fecha_inicial, oferta, fecha_final):
+    if fecha_inicial[0:10] <= oferta['published_at'][0:10] <= fecha_final[0:10]:
+        return oferta
+
+
+def cmd_fecha_y_pais(oferta_1, oferta_2):
+    if oferta_1['published_at'][0:10] < oferta_2['published_at'][0:10]:
+        if oferta_1['country_code'] < oferta_2['country_code']:
+            return oferta_1
+        
+    
+    
+def req_5(data_structs, nom_ciudad, f_inicial, f_final):
     """
     Función que soluciona el requerimiento 5
     """
-    # TODO: Realizar el requerimiento 5
-    pass
+    
+    general=0
+    dict_company_name={}
+    listado_ofertas=lt.newList("ARRAY_LIST")
+    
+    for oferta in lt.iterator(data_structs["jobs"]):
+        oferta_valida=cmp_fechas(f_inicial, oferta, f_final)
+        if oferta_valida!=None:
+            if oferta["city"]==nom_ciudad:
+                general +=1
+                dict_company_name[oferta["company_name"]]+=1
+                lt.addLast(listado_ofertas, oferta)
+                
+    llave_menor=min(dict_company_name, key=lambda k:dict_company_name[k])
+    llave_mayor=max(dict_company_name, key=lambda k:dict_company_name[k])
+    valor_menor=dict_company_name["llave_menor"]
+    valor_mayor=dict_company_name["llave_mayor"]
+        
+    
+    
+    
+    
+        
+        
+        
+                
+                
+                
+                
+                
+            
+                
+    
+    
+       
+    
+    
 
+    
+    
 
-def req_6(data_structs):
+def req_6(data_structs, n_ciudades, country_code, experience_level, f_inicial, f_final):
     """
     Función que soluciona el requerimiento 6
     """
-    # TODO: Realizar el requerimiento 6
-    pass
+    empleo=data_structs["employments_types"]
+    ofertas=organizar_lista(data_structs["jobs"], cmp_fecha)
+    res_city_cumplen=lt.newList("ARRAYLIST")
+    res_empresas_cumplen=lt.newList("ARRAYLIST")
+    res_ofertas_cumplen=lt.newList("ARRAYLIST")
+    res_mayor_n_city=0
+    res_menor_n_city=0
+    res_req_6=lt.newList("ARRAYLIST")
+    for oferta in lt.iterator(ofertas):
+        
 
 
 def req_7(data_structs):
