@@ -83,7 +83,7 @@ def load_multilocations(control, multilocations_size):
     data_structs = control['model']
     path = os.path.join(cf.data_dir, multilocations_size)
     multilocations_file = open(path, 'r', encoding='utf-8')
-    input_file = csv.DictReader(multilocations_file, delimiter=';')
+    input_file = csv.DictReader(multilocations_file, delimiter=';', fieldnames=['city', 'street', 'id'])
     for multilocation in input_file:
         model.add_multilocation(data_structs, multilocation)
     return model.multilocation_size(data_structs)
