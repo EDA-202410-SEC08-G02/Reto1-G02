@@ -141,7 +141,7 @@ def print_req_3(control, nombre_empresa, fecha_inicial, fecha_final):
 
     print(tabulate(headers, headers='keys'))
 
-def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
+def print_req_4(control):
     """
     Función que imprime la solución del Requerimiento 4 en consola
     """

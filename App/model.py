@@ -26,7 +26,6 @@
 
 
 import config as cf
-import pandas as pd
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack as st
 from DISClib.ADT import queue as qu
@@ -255,7 +254,7 @@ def req_3(data_structs, nombre_empresa, fecha_inicial, fecha_final):
     sa.sort(listado_ofertas, cmd_fecha_y_pais)
     return contador_general, contador_senior, contador_mid, contador_junior, listado_ofertas
 
-def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
+def req_4(data_structs):
     """
     Función que soluciona el requerimiento 4
     """

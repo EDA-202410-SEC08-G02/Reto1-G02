@@ -133,11 +133,11 @@ def req_3(control, nombre_empresa, fecha_inicial, fecha_final):
     return tupla_listado_ofertas
 
 
-def req_4(control, codigo_pais, fecha_inicial, fecha_final ):
+def req_4(control):
     """
     Retorna el resultado del requerimiento 4
     """
-    
+
 def req_5(control):
     """
     Retorna el resultado del requerimiento 5
