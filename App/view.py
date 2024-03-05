@@ -249,12 +249,12 @@ def print_req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_
     """
     Función que imprime la solución del Requerimiento 6 en consola
     """
-    resultado_req_6 = controller.req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
-    print(f'El total de ciudades que cumplen con las condiciones de la consulta es: {resultado_req_6["total_ciudades"]}.\n')
-    print(f'El total de empresas que cumplen con las condiciones de la consulta es: {resultado_req_6["total_empresas"]}.\n')
-    print(f'El total de ofertas publicadas que cumplen con las condiciones de la consulta es: {resultado_req_6["total_ofertas"]}.\n')
+    tupla_listado_ciudades = controller.req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
+    print(f'El total de ciudades que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_ciudades"]}.\n')
+    print(f'El total de empresas que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_empresas"]}.\n')
+    print(f'El total de ofertas publicadas que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_ofertas"]}.\n')
     
-    for ciudad_info in resultado_req_6["ciudades_ordenadas"]:
+    for ciudad_info in tupla_listado_ciudades["ciudades_ordenadas"]:
         ciudad, info = ciudad_info
         print(f'Ciudad: {ciudad}')
         print(f'Total de ofertas: {info["total_ofertas"]}')
