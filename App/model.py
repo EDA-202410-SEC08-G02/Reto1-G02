@@ -259,51 +259,58 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
-    data = {}
-    for file_path in data_structs:
-        df = pd.read_csv(file_path)
-        for index, fila in df.iterrows():
-            if fila['country_code'] == codigo_pais and fila['published_at'] >= fecha_inicial and fila['published_at'] <= fecha_final:
-                data[fila['id']] = fila
-    
-    total_ofertas = len(data)
-    total_empresas = len(data.keys())
-    total_ciudades = len(data.values())
-    ciudad_mas_ofertas = max(data.values(), key=lambda x: len(x))
-    conteo_ciudad_mas_ofertas = len(ciudad_mas_ofertas)
-    ciudad_menos_ofertas = min(data.values(), key=lambda x: len(x))
-    conteo_ciudad_menos_ofertas = len(ciudad_menos_ofertas)
-    data_ordenada = sorted(data.values(), key=lambda x: (x['published_at'], x['company_name']))
-    return total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada
+    ofertas_periodo_pais = 0
+    dict_city = {}
+    empresas_pais = lt.newList('ARRAY_LIST')
+    listado_ofertas = lt.newList('ARRAY_LIST')
+
+    for oferta in lt.iterator(data_structs['jobs']):
+        if codigo_pais == oferta['country_code']:
+            if not lt.isPresent(empresas_pais, oferta['company_name']):
+                lt.addLast(empresas_pais, oferta['company_name'])
+            if oferta['city'] not in dict_city:
+                dict_city[oferta['city']] = 1
+            else:
+                dict_city[oferta['city']] += 1
+            oferta_valida = cmp_fechas(fecha_inicial, oferta, fecha_final)
+            if oferta_valida != None:
+                ofertas_periodo_pais += 1
+                lt.addLast(listado_ofertas, oferta)
+
+    ciudades_ofertas = len(dict_city)
+    conteo_empresas_pais = lt.size(empresas_pais)
+    llave_menor = min(dict_city, key=lambda k: dict_city[k])
+    llave_mayor = max(dict_city, key=lambda k: dict_city[k])
+    valor_menor = dict_city[llave_menor]
+    valor_mayor = dict_city[llave_mayor]
+
+    return ofertas_periodo_pais, conteo_empresas_pais, ciudades_ofertas, llave_mayor, valor_mayor, llave_menor, valor_menor, listado_ofertas
 
     
-
-
 def req_5(data_structs, fecha_inicial, fecha_final, nom_ciudad):
     """
     Función que soluciona el requerimiento 5
     """
-    ofertas_ciudad_y_periodo=0
+    ofertas_ciudad_y_periodo = 0
     
-    
-    dict_company_name={}
+    dict_company_name = {}
     listado_ofertas=lt.newList("ARRAY_LIST")
     
     for oferta in lt.iterator(data_structs["jobs"]):
-        oferta_valida=cmp_fechas(fecha_inicial, oferta, fecha_final)
-        if oferta_valida!=None:
-            if oferta["city"]==nom_ciudad:
-                ofertas_ciudad_y_periodo +=1
-                dict_company_name[oferta["company_name"]]+=1
+        oferta_valida = cmp_fechas(fecha_inicial, oferta, fecha_final)
+        if oferta_valida != None:
+            if oferta["city"] == nom_ciudad:
+                ofertas_ciudad_y_periodo += 1
+                dict_company_name[oferta["company_name"]] += 1
                 lt.addLast(listado_ofertas, oferta)
     
                 
-    llave_menor=min(dict_company_name, key=lambda k:dict_company_name[k])
-    llave_mayor=max(dict_company_name, key=lambda k:dict_company_name[k])
-    valor_menor=dict_company_name["llave_menor"]
-    valor_mayor=dict_company_name["llave_mayor"]
+    llave_menor = min(dict_company_name, key=lambda k: dict_company_name[k])
+    llave_mayor = max(dict_company_name, key=lambda k: dict_company_name[k])
+    valor_menor = dict_company_name["llave_menor"]
+    valor_mayor = dict_company_name["llave_mayor"]
     
-    empresas_ciudad=len(dict_company_name)
+    empresas_ciudad = len(dict_company_name)
     return ofertas_ciudad_y_periodo, empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor
 
 
