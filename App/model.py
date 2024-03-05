@@ -262,12 +262,32 @@ def req_4(data_structs):
     
 
 
-def req_5(data_structs):
+def req_5(data_structs, fecha_inicial, fecha_final, nom_ciudad):
     """
     Función que soluciona el requerimiento 5
     """
-    # TODO: Realizar el requerimiento 5
-    pass
+    ofertas_ciudad_y_periodo=0
+    
+    
+    dict_company_name={}
+    listado_ofertas=lt.newList("ARRAY_LIST")
+    
+    for oferta in lt.iterator(data_structs["jobs"]):
+        oferta_valida=cmp_fechas(fecha_inicial, oferta, fecha_final)
+        if oferta_valida!=None:
+            if oferta["city"]==nom_ciudad:
+                ofertas_ciudad_y_periodo +=1
+                dict_company_name[oferta["company_name"]]+=1
+                lt.addLast(listado_ofertas, oferta)
+    
+                
+    llave_menor=min(dict_company_name, key=lambda k:dict_company_name[k])
+    llave_mayor=max(dict_company_name, key=lambda k:dict_company_name[k])
+    valor_menor=dict_company_name["llave_menor"]
+    valor_mayor=dict_company_name["llave_mayor"]
+    
+    empresas_ciudad=len(dict_company_name)
+    return ofertas_ciudad_y_periodo, empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor
 
 
 def req_6(data_structs):
