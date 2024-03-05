@@ -141,12 +141,30 @@ def print_req_3(control, nombre_empresa, fecha_inicial, fecha_final):
 
     print(tabulate(headers, headers='keys'))
 
-def print_req_4(control):
+def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
-        Función que imprime la solución del Requerimiento 4 en consola
+    Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    tupla_lista_ofertas_pais = control.req_4(codigo_pais, fecha_inicial, fecha_final)
+    total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada = tupla_lista_ofertas_pais
+
+    print("Total de ofertas en el país en el periodo de consulta:", total_ofertas)
+    print("Total de empresas que publicaron al menos una oferta:", total_empresas)
+    print("Número total de ciudades del país en las que se publicaron ofertas:", total_ciudades)
+    print("Ciudad del país con mayor número de ofertas:", ciudad_mas_ofertas, "- Conteo:", conteo_ciudad_mas_ofertas)
+    print("Ciudad del país con menor número de ofertas:", ciudad_menos_ofertas, "- Conteo:", conteo_ciudad_menos_ofertas)
+    print("Listado de ofertas publicadas ordenados cronológicamente:")
+    
+    for index, row in data_ordenada.iterrows():
+        print("Fecha:", row['published_at'])
+        print("Título:", row['title'])
+        print("Nivel de experticia requerido:", row['experience_level'])
+        print("Nombre de la empresa:", row['company_name'])
+        print("Ciudad de la empresa:", row['city'])
+        print("Tipo de lugar de trabajo:", row['workplace_type'])
+        print("Tipo de trabajo (remoto o no):", row['remote_interview'])
+        print("Disponible a contratar ucranianos:", row['open_to_hire_ukrainians'])
+
 
 
 def print_req_5(control):

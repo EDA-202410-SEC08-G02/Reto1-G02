@@ -26,6 +26,8 @@
 
 
 import config as cf
+import pandas as pd
+import glob
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack as st
 from DISClib.ADT import queue as qu
@@ -254,12 +256,24 @@ def req_3(data_structs, nombre_empresa, fecha_inicial, fecha_final):
     sa.sort(listado_ofertas, cmd_fecha_y_pais)
     return contador_general, contador_senior, contador_mid, contador_junior, listado_ofertas
 
-def req_4(data_structs):
+def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     """
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
-    pass
+    archivos_csv = glob.glob("*.csv")
+    data = pd.concat((pd.read_csv(f) for f in archivos_csv), ignore_index=True)
+    data_filtrada = data[(data['country_code'] == codigo_pais) & (data['published_at'] >= fecha_inicial) & (data['published_at'] <= fecha_final)]
+
+    total_ofertas = len(data_filtrada)
+    total_empresas = data_filtrada['company_name'].nunique()
+    total_ciudades = data_filtrada['city'].nunique()
+    ciudad_mas_ofertas = data_filtrada['city'].value_counts().idxmax()
+    conteo_ciudad_mas_ofertas = data_filtrada['city'].value_counts().max()
+    ciudad_menos_ofertas = data_filtrada['city'].value_counts().idxmin()
+    conteo_ciudad_menos_ofertas = data_filtrada['city'].value_counts().min()
+    data_ordenada = data_filtrada.sort_values(by=['published_at', 'company_name'])
+    return total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas
 
 
 def req_5(data_structs):
