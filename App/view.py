@@ -145,26 +145,6 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     Función que imprime la solución del Requerimiento 4 en consola
     """
-    data= control.req_4(codigo_pais, fecha_inicial, fecha_final)
-    total_ofertas, total_empresas, total_ciudades, ciudad_mas_ofertas, conteo_ciudad_mas_ofertas, ciudad_menos_ofertas, conteo_ciudad_menos_ofertas, data_ordenada = data
-
-    print("Total de ofertas en el país en el periodo de consulta:", total_ofertas)
-    print("Total de empresas que publicaron al menos una oferta:", total_empresas)
-    print("Número total de ciudades del país en las que se publicaron ofertas:", total_ciudades)
-    print("Ciudad del país con mayor número de ofertas:", ciudad_mas_ofertas, "- Conteo:", conteo_ciudad_mas_ofertas)
-    print("Ciudad del país con menor número de ofertas:", ciudad_menos_ofertas, "- Conteo:", conteo_ciudad_menos_ofertas)
-    print("Listado de ofertas publicadas ordenados cronológicamente:")
-    
-    for index, fila in data_ordenada.iterrows():
-        print("Fecha:", fila['published_at'])
-        print("Título:", fila['title'])
-        print("Nivel de experticia requerido:", fila['experience_level'])
-        print("Nombre de la empresa:", fila['company_name'])
-        print("Ciudad de la empresa:", fila['city'])
-        print("Tipo de lugar de trabajo:", fila['workplace_type'])
-        print("Tipo de trabajo (remoto o no):", fila['remote_interview'])
-        print("Disponible a contratar ucranianos:", fila['open_to_hire_ukrainians'])
-
 
 def print_req_5(control):
     """
