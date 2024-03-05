@@ -245,12 +245,24 @@ def print_req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     print(tabulate(headers, headers='keys'))
 
 
-def print_req_6(control):
+def print_req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final):
     """
-        Función que imprime la solución del Requerimiento 6 en consola
+    Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    tupla_listado_ciudades = controller.req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
+    print(f'El total de ciudades que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_ciudades"]}.\n')
+    print(f'El total de empresas que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_empresas"]}.\n')
+    print(f'El total de ofertas publicadas que cumplen con las condiciones de la consulta es: {tupla_listado_ciudades["total_ofertas"]}.\n')
+    
+    for ciudad_info in tupla_listado_ciudades["ciudades_ordenadas"]:
+        ciudad, info = ciudad_info
+        print(f'Ciudad: {ciudad}')
+        print(f'Total de ofertas: {info["total_ofertas"]}')
+        print(f'Promedio de salario ofertado: {info["promedio_salario"]}')
+        print(f'Número de empresas que publicaron al menos una oferta: {len(info["empresas"])}')
+        print(f'Empresa con mayor número de ofertas: {info["empresa_mas_ofertas"]} ({info["total_ofertas_empresa_mas"]} ofertas)')
+        print(f'Mejor oferta por salario: {info["mejor_oferta"]}')
+        print(f'Peor oferta por salario: {info["peor_oferta"]}\n')
 
 
 def print_req_7(control):
