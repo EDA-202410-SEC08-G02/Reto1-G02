@@ -139,8 +139,8 @@ def req_4(control, codigo_pais, fecha_inicial, fecha_final ):
     """
     # TODO: Modificar el requerimiento 4
     data_structs = control["model"]
-    data = model.req_4(data_structs,codigo_pais,fecha_inicial,fecha_final )
-    return data
+    tupla_listado_ofertas = model.req_4(data_structs,codigo_pais,fecha_inicial,fecha_final )
+    return tupla_listado_ofertas
 
     
 
