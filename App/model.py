@@ -307,12 +307,56 @@ def req_5(data_structs, fecha_inicial, fecha_final, nom_ciudad):
     return ofertas_ciudad_y_periodo, empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor
 
 
-def req_6(data_structs):
+def req_6(data_structs, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final):
     """
     Función que soluciona el requerimiento 6
     """
     # TODO: Realizar el requerimiento 6
-    pass
+    ciudades_unicas = []
+    # Iterar sobre las ofertas de trabajo
+    for oferta in lt.iterator(data_structs["jobs"]):
+        if (not codigo_pais) or (oferta['country_code'] == codigo_pais):
+            if oferta['experience_level'] == nivel_experticia:
+                fecha_oferta = oferta['published_at']
+                if fecha_inicial <= fecha_oferta <= fecha_final:
+                    ciudad = oferta['city']
+                    if ciudad not in ciudades_unicas:
+                        ciudades_unicas.append(ciudad)
+    #El total de ciudades que cumplen con las condiciones de la consulta
+    if ciudades_cumplen <= n:
+        total_ciudades = ciudades_cumplen
+    #El total de empresas que cumplen con las condiciones de la consulta
+    empresas_unicas = []
+    for empresa in ofertas_filtradas["company_name"]:
+        if empresa not in empresas_unicas:
+            empresas_unicas.append(empresa)
+    total_empresas = len(empresas_unicas)
+    #El total de ofertas publicadas que cumplen con las condiciones de la consulta
+    total_ofertas = len(ofertas_filtradas)
+    # promedio del salario ofrecido si la consulta se hace para un país específico
+    if codigo_pais:
+        promedio_salario_ofertado = (ofertas_filtradas['salary_from'] + ofertas_filtradas['salary_to']) / 2
+    else:
+        promedio_salario_ofertado = None
+    #ciudad con la mayor y menor cantidad de ofertas de empleo
+    ciudad_max_ofertas = ofertas_filtradas['city'].value_counts().idxmax()
+    cantidad_max_ofertas = ofertas_filtradas['city'].value_counts().max()
+    ciudad_min_ofertas = ofertas_filtradas['city'].value_counts().idxmin()
+    cantidad_min_ofertas = ofertas_filtradas['city'].value_counts().min()
+    #ordenar las cuidades
+    #resultados como un diccionario
+    resultados = {
+        'total_ciudades': total_ciudades,
+        'total_empresas': total_empresas,
+        'total_ofertas': total_ofertas,
+        'promedio_salario_ofertado': promedio_salario_ofertado,
+        'ciudad_max_ofertas': ciudad_max_ofertas,
+        'cantidad_max_ofertas': cantidad_max_ofertas,
+        'ciudad_min_ofertas': ciudad_min_ofertas,
+        'cantidad_min_ofertas': cantidad_min_ofertas,
+        'ciudades_ordenadas':ciudades_ordenadas
+    }
+    return resultados
 
 
 def req_7(data_structs):

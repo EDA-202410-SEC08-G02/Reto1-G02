@@ -151,12 +151,14 @@ def req_5(control):
     # TODO: Modificar el requerimiento 5
     pass
 
-def req_6(control):
+def req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    data_structs = control["model"]
+    tupla_listado_ciudades = model.req_6(data_structs, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
+    return tupla_listado_ciudades
 
 
 def req_7(control):
