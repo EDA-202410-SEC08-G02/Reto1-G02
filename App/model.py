@@ -261,8 +261,7 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
-    archivos_csv = glob.glob("*.csv")
-    data = pd.concat((pd.read_csv(f) for f in archivos_csv), ignore_index=True)
+    data = pd.concat((pd.read_csv(f) for f in data_structs), ignore_index=True)
     data_filtrada = data[(data['country_code'] == codigo_pais) and (data['published_at'] >= fecha_inicial) and (data['published_at'] <= fecha_final)]
 
     total_ofertas = len(data_filtrada)

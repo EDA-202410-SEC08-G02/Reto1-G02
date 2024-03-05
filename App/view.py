@@ -155,15 +155,15 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     print("Ciudad del país con menor número de ofertas:", ciudad_menos_ofertas, "- Conteo:", conteo_ciudad_menos_ofertas)
     print("Listado de ofertas publicadas ordenados cronológicamente:")
     
-    for index, row in data_ordenada.iterrows():
-        print("Fecha:", row['published_at'])
-        print("Título:", row['title'])
-        print("Nivel de experticia requerido:", row['experience_level'])
-        print("Nombre de la empresa:", row['company_name'])
-        print("Ciudad de la empresa:", row['city'])
-        print("Tipo de lugar de trabajo:", row['workplace_type'])
-        print("Tipo de trabajo (remoto o no):", row['remote_interview'])
-        print("Disponible a contratar ucranianos:", row['open_to_hire_ukrainians'])
+    for index, fila in data_ordenada.iterrows():
+        print("Fecha:", fila['published_at'])
+        print("Título:", fila['title'])
+        print("Nivel de experticia requerido:", fila['experience_level'])
+        print("Nombre de la empresa:", fila['company_name'])
+        print("Ciudad de la empresa:", fila['city'])
+        print("Tipo de lugar de trabajo:", fila['workplace_type'])
+        print("Tipo de trabajo (remoto o no):", fila['remote_interview'])
+        print("Disponible a contratar ucranianos:", fila['open_to_hire_ukrainians'])
 
 
 def print_req_5(control):
