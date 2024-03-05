@@ -137,7 +137,7 @@ def req_3(control, nombre_empresa, fecha_inicial, fecha_final):
     return tupla_listado_ofertas
 
 
-def req_4(control, codigo_pais, fecha_inicial, fecha_final ):
+def req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 4
     """
@@ -157,14 +157,14 @@ def req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     return tupla_listado_ofertas
 
 
-def req_6(control):
+def req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
     data_structs = control["model"]
-    tupla_listado_ofertas = model.req_6(data_structs)
-    return tupla_listado_ofertas
+    tupla_listado_ciudades = model.req_6(data_structs, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
+    return tupla_listado_ciudades
 
 
 def req_7(control, n_paises, fecha_inicial, fecha_final):
