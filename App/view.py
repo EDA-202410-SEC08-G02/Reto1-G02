@@ -166,7 +166,6 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
         print("Disponible a contratar ucranianos:", row['open_to_hire_ukrainians'])
 
 
-
 def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
