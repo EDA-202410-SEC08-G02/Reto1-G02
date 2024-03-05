@@ -65,7 +65,7 @@ def load_skills(control, skills_path):
     data_structs = control['model']
     path = os.path.join(cf.data_dir, skills_path)
     skills_file = open(path, 'r', encoding='utf-8')
-    input_file = csv.DictReader(skills_file, delimiter=';')
+    input_file = csv.DictReader(skills_file, delimiter=';', fieldnames=['name', 'level', 'id'])
     for skill in input_file:
         model.add_skill(data_structs, skill)
     return model.skill_size(data_structs)
@@ -107,20 +107,24 @@ def get_data(control, id):
     #TODO: Llamar la función del modelo para obtener un dato
     pass
 
-def req_1(control):
+def req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
     Retorna el resultado del requerimiento 1
     """
     # TODO: Modificar el requerimiento 1
-    pass
+    data_structs = control["model"]
+    tupla_listado_ofertas = model.req_1(data_structs, n_ofertas, codigo_pais, nivel_experticia)
+    return tupla_listado_ofertas
 
 
-def req_2(control):
+def req_2(control, n_ofertas, nombre_empresa, city):
     """
     Retorna el resultado del requerimiento 2
     """
     # TODO: Modificar el requerimiento 2
-    pass
+    data_structs = control["model"]
+    tupla_listado_ofertas = model.req_2(data_structs, n_ofertas, nombre_empresa, city)
+    return tupla_listado_ofertas
 
 
 def req_3(control, nombre_empresa, fecha_inicial, fecha_final):
@@ -139,32 +143,38 @@ def req_4(control, codigo_pais, fecha_inicial, fecha_final ):
     """
     # TODO: Modificar el requerimiento 4
     data_structs = control["model"]
-    tupla_listado_ofertas = model.req_4(data_structs,codigo_pais,fecha_inicial,fecha_final )
+    tupla_listado_ofertas = model.req_4(data_structs, codigo_pais, fecha_inicial, fecha_final)
     return tupla_listado_ofertas
 
     
-
-def req_5(control):
+def req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    data_structs = control["model"]
+    tupla_listado_ofertas = model.req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final)
+    return tupla_listado_ofertas
+
 
 def req_6(control):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    data_structs = control["model"]
+    tupla_listado_ofertas = model.req_6(data_structs)
+    return tupla_listado_ofertas
 
 
-def req_7(control):
+def req_7(control, n_paises, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    pass
+    data_structs = control["model"]
+    tupla_listado_ofertas = model.req7(data_structs, n_paises, fecha_inicial, fecha_final)
+    return tupla_listado_ofertas
 
 
 def req_8(control):
@@ -173,23 +183,6 @@ def req_8(control):
     """
     # TODO: Modificar el requerimiento 8
     pass
-
-def seleccion_array_o_linked(control):
-    
-    print("Seleccione la lista deseada:")
-    print("1. ARRAY_LIST")
-    print("2. LINKED_LIST")
-    option = input("Escoge una opcion:")
-    if option == "1":
-        model.seleccion_array_o_linked = model.ARRAY_LIST
-    elif option == "2":
-        model.seleccion_array_o_linked = model.LINKED_LIST
-    else:
-        print("Opcion Incorreta")
-    
-    
-    
-    
 
 # Funciones para medir tiempos de ejecucion
 

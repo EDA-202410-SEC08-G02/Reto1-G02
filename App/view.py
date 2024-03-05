@@ -91,19 +91,65 @@ def print_jobs(control, pos, id):
 
     print(tabulate(headers, headers='keys'))
 
-def print_req_1(control):
-    """
-        Función que imprime la solución del Requerimiento 2 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
 
-def print_req_2(control):
+def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
+
+    print(f'El total de ofertas de trabajo ofrecidas según la condición {nivel_experticia} es {tupla_listado_ofertas[0]}.\n')
+    print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
+    headers = {'Fecha de publicación de la oferta': [],
+               'Título de la oferta': [],
+               'Nombre de la empresa de la oferta': [],
+               'Nivel de experticia de la oferta': [],
+               'País de la empresa de la oferta': [],
+               'Ciudad de la empresa de la oferta': [],
+               'Tamaño de la empresa de la oferta': [], 
+               'Tipo de ubicación de trabajo': [],
+               'Disponible a contratar ucranianos': []}
+    
+    for oferta in lt.iterator(tupla_listado_ofertas[1]):
+        headers['Fecha de publicación de la oferta'].append(oferta['published_at'])
+        headers['Título de la oferta'].append(oferta['title'])
+        headers['Nombre de la empresa de la oferta'].append(oferta['company_name'])
+        headers['Nivel de experticia de la oferta'].append(oferta['experience_level'])
+        headers['Ciudad de la oferta'].append(oferta['city'])
+        headers['País de la empresa de la oferta'].append(oferta['country_code'])
+        headers['Ciudad de la empresa de la oferta'].append(oferta['city'])
+        headers['Tamaño de la empresa de la oferta'].append(oferta['company_size'])
+        headers['Tipo de ubicación de trabajo'].append(oferta['workplace_type'])
+        headers['Disponible a contratar ucranianos'].append(oferta['open_to_hire_ukrainians'])
+
+    print(tabulate(headers, headers='keys'))
+
+def print_req_2(control, n_ofertas, nombre_empresa, city):
+    """
+        Función que imprime la solución del Requerimiento 2 en consola
+    """
+    tupla_listado_ofertas = controller.req_2(control, n_ofertas, nombre_empresa, city)
+
+    print(f'El total de ofertas ofrecidas por la empresa y ciudad es {tupla_listado_ofertas[0]}.\n')
+    headers = {'Fecha de publicación': [],
+               'Título de la oferta': [],
+               'Nombre de la empresa que publica': [],
+               'Nivel de experticia de la oferta': [],
+               'Ciudad de la oferta': [],
+               'País de la oferta': [],
+               'Formato de aplicacion de la oferta': [],
+               'Tipo de lugar de trabajo de la oferta': []}
+    for oferta in lt.iterator(tupla_listado_ofertas[1]):
+        headers['Fecha de publicación'].append(oferta['published_at'])
+        headers['Título de la oferta'].append(oferta['title'])
+        headers['Nombre de la empresa que publica'].append(oferta['company_name'])
+        headers['Nivel de experticia de la oferta'].append(oferta['experience_level'])
+        headers['Ciudad de la oferta'].append(oferta['city'])
+        headers['País de la oferta'].append(oferta['country_code'])
+        headers['Formato de aplicacion de la oferta'].append(oferta['display_offer'])
+        headers['Tipo de lugar de trabajo de la oferta'].append(oferta['workplace_type'])
+
+    print(tabulate(headers, headers='keys'))
 
 
 def print_req_3(control, nombre_empresa, fecha_inicial, fecha_final):
@@ -147,12 +193,12 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     tupla_listado_ofertas = controller.req_4(control, codigo_pais, fecha_inicial, fecha_final)
 
-    print(f"El total de ofertas en el país en el período de consulta es {tupla_listado_ofertas[0]}.")
-    print(f"El total de empresas que publicaron al menos una oferta es {tupla_listado_ofertas[1]}.")
-    print(f"El número total de ciudades del país en las que se publicaron ofertas es {tupla_listado_ofertas[2]}.")
-    print(f"La ciudad del país con mayor número de ofertas es {tupla_listado_ofertas[3]} con {tupla_listado_ofertas[4]} ofertas.")
-    print(f"La ciudad del país con menor número de ofertas es {tupla_listado_ofertas[5]} con {tupla_listado_ofertas[6]} ofertas.")
-    print(f"Listado de ofertas publicadas ordenados cronológicamente:")
+    print(f"El total de ofertas en el país en el período de consulta es {tupla_listado_ofertas[0]}\n.")
+    print(f"El total de empresas que publicaron al menos una oferta es {tupla_listado_ofertas[1]}\n.")
+    print(f"El número total de ciudades del país en las que se publicaron ofertas es {tupla_listado_ofertas[2]}\n.")
+    print(f"La ciudad del país con mayor número de ofertas es {tupla_listado_ofertas[3]} con {tupla_listado_ofertas[4]} ofertas\n.")
+    print(f"La ciudad del país con menor número de ofertas es {tupla_listado_ofertas[5]} con {tupla_listado_ofertas[6]} ofertas\n.")
+    print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
     
     headers = {"Fecha de publicación de la oferta: ": [],
                "Título de la oferta: ": [],
@@ -175,12 +221,28 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     
     print(tabulate(headers, headers='keys'))
 
-def print_req_5(control):
+def print_req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
-    pass
+    tupla_listado_ofertas = controller.req_5(control, nombre_ciudad, fecha_inicial, fecha_final)
+    print(f'El número total de ofertas de una ciudad en un periodo es {tupla_listado_ofertas[0]}.\n')
+    print(f'El número total de empresas que publicaron por lo menos una oferta en la ciudad de consulta es {tupla_listado_ofertas[1]}.\n')
+    print(f'La empresa con mayor número de ofertas y su conteo es {tupla_listado_ofertas[2][3]}.\n')
+    print(f'La empresa con mayor número de ofertas y su conteo es {tupla_listado_ofertas[4][5]}.\n')
+    headers = {'Fecha de publicación': [],
+               'Título de la oferta': [],
+               'Nombre de la empresa que publica': [],
+               'Tamaño de la empresa de la oferta': [],
+               'Tipo de lugar de trabajo de la oferta': []}
+    
+    for oferta in lt.iterator(tupla_listado_ofertas[4]):
+        headers['Fecha de publicación'].append(oferta['published_at'])
+        headers['Título de la oferta'].append(oferta['title'])
+        headers['Nombre de la empresa que publica'].append(oferta['company_name'])
+        headers['Tamaño de la empresa de la oferta'].append(oferta['company_size'])
+        headers['Tipo de lugar de trabajo de la oferta'].append(oferta['workplace_type'])
+    print(tabulate(headers, headers='keys'))
 
 
 def print_req_6(control):

@@ -94,99 +94,15 @@ def add_multilocation(data_structs, multilocation):
     return data_structs
 
 
-# Funciones para creacion de datos
-def new_job(title,street,city,country_code,address_text,marker_icon,workplace_type,company_name,company_url,company_size,
-            experience_level,published_at,remote_interview,open_to_hire_ukrainians,id,display_offer):
-    """
-    Crea un nuevo elemento job
-    """
-    job = {'title': '',
-           'street': '',
-           'city': '',
-           'country_code': '',
-           'address_text': '',
-           'marker_icon': '',
-           'workplace_type': '',
-           'company_name': '',
-           'company_url': '',
-           'company_size': '',
-           'experience_level': '',
-           'published_at': '',
-           'remote_interview': '',
-           'open_to_hire_ukrainians': '',
-           'id': '',
-           'display_offer': ''}
-    
-    job['title'] = title
-    job['street'] = street
-    job['city'] = city
-    job['country_code'] = country_code
-    job['address_text'] = address_text
-    job['marker_icon'] = marker_icon
-    job['workplace_type'] = workplace_type
-    job['company_name'] = company_name
-    job['company_url'] = company_url
-    job['company_size'] = company_size
-    job['experience_level'] = experience_level
-    job['published_at'] = published_at
-    job['remote_interview'] = remote_interview
-    job['open_to_hire_ukrainians'] = open_to_hire_ukrainians
-    job['id'] = id
-    job['display_offer'] = display_offer
-    return job
-
-def new_skill(field, level, title):
-    """
-    Crea un nuevo elemento skill
-    """
-    skill = {'field': '',
-             'level': '',
-             'title': ''}
-    
-    skill['field'] = field
-    skill['level'] = level
-    skill['title'] = title
-    return skill
-
-def new_employment_type(type, title, currency, min_salary, max_salary):
-    """
-    Crea un nuevo elemento employment_type
-    """
-    employment_type = {'type': '',
-                       'title': '',
-                       'currency': '',
-                       'min_salary': '',
-                       'max_salary': ''}
-    
-    employment_type['type'] = type
-    employment_type['title'] = title
-    employment_type['currency'] = currency
-    employment_type['min_salary'] = min_salary
-    employment_type['max_salary'] = max_salary  
-    return employment_type
-
-def new_multilocation(location, city, title):
-    """
-    Crea un nuevo elemento multilocation
-    """
-    multilocation = {'location': '',
-                     'city': '',
-                     'title': ''}
-    
-    multilocation['location'] = location
-    multilocation['city'] = city
-    multilocation['title'] = title
-    return multilocation
-
 # Funciones de consulta
 
-
-def get_data(data_structs, id):
+def get_data(lst, id):
     """
     Retorna un dato a partir de su ID
     """
     #TODO: Crear la función para obtener un dato de una lista
-    pass
+    element = lt.getElement(lst, id)
+    return element
 
 def job_size(data_structs):
     """
@@ -216,12 +132,38 @@ def multilocation_size(data_structs):
     size = lt.size(data_structs['multilocations'])
     return size
 
-def req_2(data_structs):
+def req_1(data_structs, n_ofertas, codigo_pais, nivel_experticia):
     """
     Función que soluciona el requerimiento 2
     """
-    # TODO: Realizar el requerimiento 2
-    pass
+    ofertas_nivel_experticia = 0
+    listado_ofertas = lt.newList('ARRAY_LIST')
+
+    for oferta in lt.iterator(data_structs['jobs']):
+        if codigo_pais == oferta['country_code']:
+            if nivel_experticia == oferta['experience_level']:
+                ofertas_nivel_experticia += 1
+                lt.addLast(listado_ofertas, oferta)
+    listado_ofertas = sublist(listado_ofertas, 1, n_ofertas)
+
+    return ofertas_nivel_experticia, listado_ofertas
+
+def req_2(data_structs, n_ofertas, nombre_empresa, city):
+    """
+    Función que soluciona el requerimiento 2
+    """
+    contador_ofertas = 0
+    listado_ofertas = lt.newList('ARRAY_LIST')
+
+    for oferta in lt.iterator(data_structs['jobs']):
+        if nombre_empresa == oferta['company_name']:
+            if city == oferta['city']:
+                contador_ofertas += 1
+                lt.addLast(listado_ofertas, oferta)
+                
+    listado_ofertas = sublist(listado_ofertas, 1, n_ofertas)
+
+    return contador_ofertas, listado_ofertas
 
 
 def req_3(data_structs, nombre_empresa, fecha_inicial, fecha_final):
@@ -236,23 +178,20 @@ def req_3(data_structs, nombre_empresa, fecha_inicial, fecha_final):
 
     for oferta in lt.iterator(data_structs['jobs']):
         if nombre_empresa == oferta['company_name']:
-            oferta_valida = cmp_fechas(fecha_inicial, oferta, fecha_final)
-            if oferta_valida != None:
-                
+            esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
+            if esta_entre_fechas_inicial_y_final:
                 contador_general += 1
-
-                if 'senior' == oferta_valida['experience_level']:
+                if 'senior' == oferta['experience_level']:
                     contador_senior += 1
-
-                elif 'mid' == oferta_valida['experience_level']:
+                elif 'mid' == oferta['experience_level']:
                     contador_mid += 1
-
                 else:
                     contador_junior += 1
-                lt.addLast(listado_ofertas, oferta_valida)
+                lt.addLast(listado_ofertas, oferta)
 
-    sa.sort(listado_ofertas, cmd_fecha_y_pais)
-    return contador_general, contador_senior, contador_mid, contador_junior, listado_ofertas
+
+    return contador_general, contador_junior, contador_mid, contador_senior, listado_ofertas
+
 
 def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     """
@@ -272,8 +211,8 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
                 dict_city[oferta['city']] = 1
             else:
                 dict_city[oferta['city']] += 1
-            oferta_valida = cmp_fechas(fecha_inicial, oferta, fecha_final)
-            if oferta_valida != None:
+            esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
+            if esta_entre_fechas_inicial_y_final:
                 ofertas_periodo_pais += 1
                 lt.addLast(listado_ofertas, oferta)
 
@@ -287,31 +226,35 @@ def req_4(data_structs, codigo_pais, fecha_inicial, fecha_final):
     return ofertas_periodo_pais, conteo_empresas_pais, ciudades_ofertas, llave_mayor, valor_mayor, llave_menor, valor_menor, listado_ofertas
 
     
-def req_5(data_structs, fecha_inicial, fecha_final, nom_ciudad):
+def req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final):
     """
     Función que soluciona el requerimiento 5
     """
     ofertas_ciudad_y_periodo = 0
-    
     dict_company_name = {}
+    empresas_ciudad = lt.newList('ARRAY_LIST')
     listado_ofertas=lt.newList("ARRAY_LIST")
     
     for oferta in lt.iterator(data_structs["jobs"]):
-        oferta_valida = cmp_fechas(fecha_inicial, oferta, fecha_final)
-        if oferta_valida != None:
-            if oferta["city"] == nom_ciudad:
+        if nombre_ciudad == oferta["city"]:
+            if not lt.isPresent(empresas_ciudad, oferta['city']):
+                lt.addLast(empresas_ciudad, oferta['city'])
+            if oferta['company_name'] not in dict_company_name:
+                dict_company_name[oferta['company_name']] = 1
+            else:
+                dict_company_name[oferta['company_name']] += 1
+            esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
+            if esta_entre_fechas_inicial_y_final:
                 ofertas_ciudad_y_periodo += 1
-                dict_company_name[oferta["company_name"]] += 1
                 lt.addLast(listado_ofertas, oferta)
     
-                
+    conteo_empresas_ciudad = lt.size(empresas_ciudad)
     llave_menor = min(dict_company_name, key=lambda k: dict_company_name[k])
     llave_mayor = max(dict_company_name, key=lambda k: dict_company_name[k])
     valor_menor = dict_company_name["llave_menor"]
     valor_mayor = dict_company_name["llave_mayor"]
     
-    empresas_ciudad = len(dict_company_name)
-    return ofertas_ciudad_y_periodo, empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor
+    return ofertas_ciudad_y_periodo, conteo_empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor, listado_ofertas
 
 
 def req_6(data_structs):
@@ -322,58 +265,87 @@ def req_6(data_structs):
     pass
 
 
-def req_7(data_structs):
+def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     """
     Función que soluciona el requerimiento 7
     """
-    # TODO: Realizar el requerimiento 7
-    pass
+    
+    total_ofertas = 0
+    dict_country_code = {}
+    dict_city = {}
+    dict_skills = {}
+    listado_ofertas = lt.newList('ARRAY_LIST')
 
+    for oferta in lt.iterator(data_structs["jobs"]):
+        esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
+        if esta_entre_fechas_inicial_y_final:
+            if len(dict_country_code) <= n_paises:
+                if oferta['country_code'] not in dict_country_code:
+                    dict_country_code[oferta['country_code']] = 1
+                else:
+                    dict_country_code[oferta['country_code']] += 1
+
+                    total_ofertas += 1
+
+                    if oferta["city"] not in dict_city:
+                        dict_city[oferta["city"]] = 1
+                    else:
+                        dict_city[oferta["city"]] += 1
+
+                    for habilidad in lt.iterator(data_structs['skills']):
+                        if oferta['id'] == habilidad['id']:
+                            if habilidad["name"] not in dict_skills:
+                                dict_city[oferta["city"]] = 1
+                            else:
+                                dict_city[oferta["city"]] += 1
+                            
+    
+    conteo_ciudades_ofertas_pais = len(dict_city)
+    llave_mayor_country_code = max(dict_country_code, key=lambda k:dict_country_code[k])
+    llave_mayor_city = max(dict_city, key=lambda k:dict_city[k])
+    llave_mayor_skills = max(dict_city, key=lambda k:dict_city[k])
+    llave_menor_skills = min(dict_city, key=lambda k:dict_city[k])
+
+    valor_mayor_country = dict_country_code[llave_mayor_country_code]
+    valor_mayor_city = dict_city[llave_mayor_city]
+    valor_mayor_skills = dict_skills[llave_mayor_skills]
+    valor_menor_skills = dict_skills[llave_menor_skills]
+
+    promedio_nivel_skills = sum(dict_skills.values())/len(dict_skills)
 
 def req_8(data_structs):
-    """
+    '''
     Función que soluciona el requerimiento 8
-    """
+    '''
     # TODO: Realizar el requerimiento 8
     pass
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+def cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final):
+    return (fecha_inicial[0:10] <= oferta['published_at'][0:10] <= fecha_final[0:10])
 
-def compare(data_1, data_2):
+def cmp_fechas(oferta1, oferta2):
+    return (oferta1['published_at'][0:10] < oferta2['published_at'][0:10])
+        
+def cmp_ofertas_by_fecha_y_codigo_pais(oferta1, oferta2):
     """
-    Función encargada de comparar dos datos
-    """
-    #TODO: Crear función comparadora de la lista
-    pass
-
-# Funciones de ordenamiento
-
-
-def sort_criteria(data_1, data_2):
-    """sortCriteria criterio de ordenamiento para las funciones de ordenamiento
-
+    Devuelve verdadero (True) si la fecha de publicación de la oferta1 es menor que en la
+    oferta2, en caso de que sean iguales se analiza la empresa de la oferta
+    laboral, de lo contrario devuelva falso (False).
     Args:
-        data1 (_type_): _description_
-        data2 (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    #TODO: Crear función comparadora para ordenar
-    pass
-
-def cmp_fechas(fecha_inicial, oferta, fecha_final):
-    if fecha_inicial[0:10] <= oferta['published_at'][0:10] <= fecha_final[0:10]:
-        return oferta
-
-def cmp_fechas_sa(fecha_1, fecha_2):
-    if fecha_1[0:10] < fecha_2[0:10]:
-        return fecha_1
-
-def cmd_fecha_y_pais(oferta_1, oferta_2):
-    if oferta_1['published_at'][0:10] < oferta_2['published_at'][0:10]:
-        if oferta_1['country_code'] < oferta_2['country_code']:
-            return oferta_1
+    oferta1: información de la primera oferta laboral que incluye
+    "company_name" y "published_at"
+    oferta1: información de la segunda oferta laboral que incluye
+    "company_name" y "published_at"
+    | """
+    #Comparar las fechas de publicación
+    if oferta1["published_at"] < oferta2["published_at"]:
+        return True
+    elif oferta1["published_at"] > oferta2["published_at"]:
+        return False
+        #Comparar los códigos de país
+    else:
+        return (oferta1["country_code"] < oferta2["country_code"])
 
 def cmp_ofertas_by_empresa_y_fecha (oferta1, oferta2):
     """
@@ -391,46 +363,39 @@ def cmp_ofertas_by_empresa_y_fecha (oferta1, oferta2):
         return True
     elif oferta1["company_name"] > oferta2["company_name"]:
         return False
+    
+    #Comparar fecha de publicacion
     else:
-        #Comparar fecha de publicacion
-        fecha_oferta1 = oferta1["published_at"]
-        fecha_oferta2 = oferta2["published_at"]
-
-        #Extraer los items de la fecha
-        fecha_oferta1_items = fecha_oferta1.split(" ")
-        fecha_oferta2_items = fecha_oferta2.split(" ")
-
-        #Comparar año, mes, dia, hora y minuto 
-        for i in range(len(fecha_oferta1_items)):
-            if fecha_oferta1_items[i] < fecha_oferta2_items[i]:
-                return True 
-            elif fecha_oferta1_items[i] > fecha_oferta2_items[i]:
-                return False
-        #Si las fechas son iguales
+        return (oferta1["published_at"] < oferta2["published_at"])
+    
+def cmp_ofertas_by_fecha_y_empresa (oferta1, oferta2):
+    """
+    Devuelve verdadero (True) si la fecha de publicación de la oferta1 es menor que en la
+    oferta2, en caso de que sean iguales se analiza la empresa de la oferta
+    laboral, de lo contrario devuelva falso (False).
+    Args:
+    oferta1: información de la primera oferta laboral que incluye
+    "company_name" y "published_at"
+    oferta1: información de la segunda oferta laboral que incluye
+    "company_name" y "published_at"
+    | """
+    #Comparar las fechas de publicación
+    if oferta1["published_at"] < oferta2["published_at"]:
+        return True
+    elif oferta1["published_at"] > oferta2["published_at"]:
         return False
+    
+    #Comparar los nombres de las empresas
+    else:
+        return (oferta1["company_name"] < oferta2["company_name"])
 
-def seleccion_array_o_linked(answer):
-    if answer=="1":
-        answer=lt.newList("ARRAY_LIST")
-        add_employment_type(answer)
-        add_job(answer)
-        add_multilocation(answer)
-        add_skill(answer)        
-    elif answer=="2":
-        answer==lt.newList("SINGLE_LINKED")
-        add_employment_type(answer)
-        add_job(answer)
-        add_multilocation(answer)
-        add_skill(answer) 
-    return answer
-        
 def sublist(lst, pos, num):
     new_sublist = lt.subList(lst, pos, num)
     return new_sublist
 
-def sort(data_structs):
+def sort(lst, sort_crit):
     """
     Función encargada de ordenar la lista con los datos
     """
     #TODO: Crear función de ordenamiento
-    pass
+    sa.sort(lst, sort_crit)
