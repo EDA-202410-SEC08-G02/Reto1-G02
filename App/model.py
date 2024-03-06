@@ -143,9 +143,9 @@ def req_1(data_structs, n_ofertas, codigo_pais, nivel_experticia):
         if codigo_pais == oferta['country_code']:
             if nivel_experticia == oferta['experience_level']:
                 ofertas_nivel_experticia += 1
-                lt.addLast(listado_ofertas, oferta)
-    listado_ofertas = sublist(listado_ofertas, 1, n_ofertas)
-
+                if lt.size(listado_ofertas) < n_ofertas:
+                    lt.addLast(listado_ofertas, oferta)
+                
     return ofertas_nivel_experticia, listado_ofertas
 
 def req_2(data_structs, n_ofertas, nombre_empresa, city):
@@ -159,9 +159,9 @@ def req_2(data_structs, n_ofertas, nombre_empresa, city):
         if nombre_empresa == oferta['company_name']:
             if city == oferta['city']:
                 contador_ofertas += 1
-                lt.addLast(listado_ofertas, oferta)
-                
-    listado_ofertas = sublist(listado_ofertas, 1, n_ofertas)
+                if lt.size(listado_ofertas) < n_ofertas:
+                    lt.addLast(listado_ofertas, oferta)
+
 
     return contador_ofertas, listado_ofertas
 
@@ -253,8 +253,8 @@ def req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final):
     conteo_empresas_ciudad = len(dict_city)
     llave_menor = min(dict_company_name, key=lambda k: dict_company_name[k])
     llave_mayor = max(dict_company_name, key=lambda k: dict_company_name[k])
-    valor_menor = dict_company_name["llave_menor"]
-    valor_mayor = dict_company_name["llave_mayor"]
+    valor_menor = dict_company_name[llave_menor]
+    valor_mayor = dict_company_name[llave_mayor]
     
     return ofertas_ciudad_y_periodo, conteo_empresas_ciudad, llave_mayor, valor_mayor, llave_menor, valor_menor, listado_ofertas
 
@@ -263,49 +263,65 @@ def req_6(data_structs, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_f
     """
     Función que soluciona el requerimiento 6
     """
-    # TODO: Realizar el requerimiento 6
-    ciudades_unicas = []
+    ciudades_unicas = {}
     for oferta in lt.iterator(data_structs["jobs"]):
-        if (not codigo_pais) or (oferta['country_code'] == codigo_pais):
+        if (oferta['country_code'] == codigo_pais):
             if oferta['experience_level'] == nivel_experticia:
                 fecha_oferta = oferta['published_at']
                 if fecha_inicial <= fecha_oferta <= fecha_final:
-                    ciudad = oferta['city']
-                    if ciudad not in ciudades_unicas:
-                        ciudades_unicas.append(ciudad)
+                    if oferta['city'] not in ciudades_unicas:
+                        ciudades_unicas[oferta['city']] = 1
+                    else:
+                        ciudades_unicas[oferta['city']] += 1
     #Total de ciudades unicas
     ciudades_cumplen = len(ciudades_unicas)
     total_ciudades = min(ciudades_cumplen, n)
    # Filtrar las ofertas
-    ofertas_filtradas = []
-    for oferta in data_structs["jobs"]:
-        if (not codigo_pais or oferta['country_code'] == codigo_pais) and oferta['experience_level'] == nivel_experticia:
-            ofertas_filtradas.append(oferta)
+    ofertas_filtradas = {}
+    for oferta in lt.iterator(data_structs["jobs"]):
+        if oferta['country_code'] == codigo_pais:
+            if oferta['experience_level'] == nivel_experticia:
+                if oferta not in ofertas_filtradas:
+                    ofertas_filtradas[oferta] = 1
+                else:
+                    ofertas_filtradas[oferta] += 1
+
     #El total de empresas que cumplen con las condiciones de la consulta
-    empresas_unicas = []
+    empresas_unicas = {}
     for oferta in ofertas_filtradas:
-        empresa = oferta["company_name"]
-        if empresa not in empresas_unicas:
-            empresas_unicas.append(empresa)
+        
+        if oferta["company_name"] not in empresas_unicas:
+            empresas_unicas[oferta["company_name"]] = 1
+        else:
+            empresas_unicas[oferta["company_name"]] += 1
+
     total_empresas = len(empresas_unicas)
+
     #El total de ofertas publicadas que cumplen con las condiciones de la consulta
     total_ofertas = len(ofertas_filtradas)
+
     # Promedio
     suma_salarios = 0
     conteo_salarios = 0
-    for oferta in ofertas_filtradas:
-        if 'salary_from' in oferta and 'salary_to' in oferta:
-            suma_salarios += (oferta['salary_from'] + oferta['salary_to']) / 2
-            conteo_salarios += 1
-    promedio_salario_ofertado = None
-    if conteo_salarios > 0:
-        promedio_salario_ofertado = suma_salarios / conteo_salarios
+    lista_salarios_ofertados = []
+    for oferta in lt.iterator(data_structs["jobs"]):
+        for employment_type in lt.iterator(data_structs['employments_types']):
+            if oferta['country_code'] == codigo_pais:
+                if oferta['experience_level'] == nivel_experticia:
+                    if employment_type['id'] == oferta['id']:
+                        suma_salarios += (oferta['salary_from'] + oferta['salary_to'])/2
+                        lista_salarios_ofertados.append(suma_salarios)
+                        conteo_salarios += 1
+    
+    promedio_salario_ofertado = suma_salarios / conteo_salarios
+    
     # Ciudad con mayor cantidad de ofertas
-    ciudad_mas_ofertas = ofertas_filtradas['city'].value_counts().idxmax()
-    total_ofertas_ciudad_mas = ofertas_filtradas['city'].value_counts().max()
+    llave_mayor = max(ofertas_filtradas, key=lambda k:ofertas_filtradas[k])
+    valor_mayor = ofertas_filtradas[llave_mayor]
+    total_ofertas_ciudad_mas = ofertas_filtradas.value_counts().max()
     # Ciudad con menor cantidad de ofertas
-    ciudad_menos_ofertas = ofertas_filtradas['city'].value_counts().idxmin()
-    total_ofertas_ciudad_menos = ofertas_filtradas['city'].value_counts().min()
+    ciudad_menos_ofertas = ofertas_filtradas.value_counts().idxmin()
+    total_ofertas_ciudad_menos = ofertas_filtradas.value_counts().min()
     #ordenar las cuidades
     conteo_ofertas_por_ciudad = {}
     for oferta in ofertas_filtradas:

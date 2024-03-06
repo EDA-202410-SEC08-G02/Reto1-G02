@@ -74,7 +74,7 @@ def load_employments_types(control, employments_types_path):
     data_structs = control['model']
     path = os.path.join(cf.data_dir, employments_types_path)
     employment_types_file = open(path, 'r', encoding='utf-8')
-    input_file = csv.DictReader(employment_types_file, delimiter=';')
+    input_file = csv.DictReader(employment_types_file, delimiter=';', fieldnames=['type', 'id', 'currency_salary', 'salary_from', 'salary_to'])
     for employment_type in input_file:
         model.add_employment_type(data_structs, employment_type)
     return model.employment_type_size(data_structs)
@@ -178,7 +178,7 @@ def req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
     """
     start_time = get_time()
     data_structs = control["model"]
-    tupla_listado_ciudades = model.req_6(data_structs, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
+    tupla_listado_ciudades = model.req_6(data_structs, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
     stop_time = get_time()
     delta = delta_time(start_time, stop_time)
     return delta, tupla_listado_ciudades
@@ -190,7 +190,7 @@ def req_7(control, n_paises, fecha_inicial, fecha_final):
     """
     start_time = get_time()
     data_structs = control["model"]
-    tupla_listado_ofertas = model.req7(data_structs, n_paises, fecha_inicial, fecha_final)
+    tupla_listado_ofertas = model.req_7(data_structs, n_paises, fecha_inicial, fecha_final)
     stop_time = get_time()
     delta = delta_time(start_time, stop_time)
     return delta, tupla_listado_ofertas

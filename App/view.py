@@ -97,7 +97,6 @@ def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
     delta, tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
     print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
-    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El total de ofertas de trabajo ofrecidas según la condición {nivel_experticia} es {tupla_listado_ofertas[0]}.\n')
     print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
     headers = {'Fecha de publicación de la oferta': [],
@@ -326,13 +325,13 @@ if __name__ == "__main__":
             print_jobs(control, jobs_size-2, 3)
 
         elif int(inputs) == 2:
-            n_ofertas = input('El número (N) de ofertas a listar: ')
+            n_ofertas = int(input('El número (N) de ofertas a listar: '))
             codigo_pais = input('Código del país: ')
             nivel_experticia = input('Nivel de experticia de las ofertas a consultar: ')
             print_req_1(control, n_ofertas, codigo_pais, nivel_experticia)
 
         elif int(inputs) == 3:
-            n_ofertas = input('El número (N) de ofertas a listar: ')
+            n_ofertas = int(input('El número (N) de ofertas a listar: '))
             nombre_empresa = input('Nombre completo de la empresa a consultar: ')
             city = input('Ciudad de la oferta: ')
             print_req_2(control, n_ofertas, nombre_empresa, city)
@@ -351,12 +350,12 @@ if __name__ == "__main__":
 
         elif int(inputs) == 6:
             nombre_ciudad = input('Nombre de la ciudad: ')
-            fecha_final = input('La fecha inicial del periodo a consultar: ')
+            fecha_inicial = input('La fecha inicial del periodo a consultar: ')
             fecha_final = input('La fecha final del periodo a consultar: ')
             print_req_5(control, nombre_ciudad, fecha_inicial, fecha_final)
 
         elif int(inputs) == 7:
-            n = input('Numero de ciudades para la consulta:')
+            n = int(input('Numero de ciudades para la consulta:'))
             codigo_pais = input('Codigo del pais:')
             nivel_experticia = input('Nivel de experticia de las ofertas de interés:')
             fecha_inicial = input('Fecha inicial:')
