@@ -324,7 +324,12 @@ if __name__ == "__main__":
             print_req_4(control, codigo_pais, fecha_inicial, fecha_final)
 
         elif int(inputs) == 6:
-            print_req_5(control)
+            n = input('Numero de ciudades para la consulta:')
+            codigo_pais = input('Codigo del pais:')
+            nivel_experticia = input('Nivel de experticia de las ofertas de interés:')
+            fecha_inicial = input('Fecha inicial:')
+            fecha_final = input('Fecha final:')
+            print_req_5(control,n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
 
         elif int(inputs) == 7:
             print_req_6(control)
