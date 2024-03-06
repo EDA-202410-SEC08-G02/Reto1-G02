@@ -266,12 +266,31 @@ def print_req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_
         print(f'Peor oferta por salario: {info["peor_oferta"]}\n')
 
 
-def print_req_7(control):
+def print_req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     """
-        Función que imprime la solución del Requerimiento 7 en consola
+    Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    tupla_listado_ofertas = controller.req_7(data_structs, n_paises, fecha_inicial, fecha_final)
+    
+    total_ofertas = tupla_listado_ofertas[0]
+    conteo_ciudades_ofertas_pais = tupla_listado_ofertas[1]
+    llave_mayor_country_code = tupla_listado_ofertas[2]
+    valor_mayor_country = tupla_listado_ofertas[3]
+    llave_mayor_city = tupla_listado_ofertas[4]
+    valor_mayor_city = tupla_listado_ofertas[5]
+    llave_mayor_skills = tupla_listado_ofertas[6]
+    valor_mayor_skills = tupla_listado_ofertas[7]
+    llave_menor_skills = tupla_listado_ofertas[8]
+    valor_menor_skills = tupla_listado_ofertas[9]
+    promedio_nivel_skills = tupla_listado_ofertas[10]
+    
+    print(f'El número total de ofertas en el periodo especificado es: {total_ofertas}\n')
+    print(f'El número de ciudades con ofertas de trabajo en los países consultados es: {conteo_ciudades_ofertas_pais}\n')
+    print(f'El país con mayor número de ofertas es: {llave_mayor_country_code}, con un total de {valor_mayor_country} ofertas\n')
+    print(f'La ciudad con mayor número de ofertas es: {llave_mayor_city}, con un total de {valor_mayor_city} ofertas\n')
+    print(f'La habilidad más demandada en las ofertas es: {llave_mayor_skills}, con un total de {valor_mayor_skills} ofertas\n')
+    print(f'La habilidad menos demandada en las ofertas es: {llave_menor_skills}, con un total de {valor_menor_skills} ofertas\n')
+    print(f'El promedio del número de habilidades requeridas por oferta es: {promedio_nivel_skills}\n')
 
 
 def print_req_8(control):
