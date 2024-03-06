@@ -123,7 +123,7 @@ def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
         headers['Disponible a contratar ucranianos'].append(oferta['open_to_hire_ukrainians'])
     
     print(tabulate(headers, headers='keys'))
-    print(delta)
+
 
 def print_req_2(control, n_ofertas, nombre_empresa, city):
     """
