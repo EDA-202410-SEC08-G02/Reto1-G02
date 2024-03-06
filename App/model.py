@@ -250,8 +250,7 @@ def req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final):
                     ofertas_ciudad_y_periodo += 1
                     lt.addLast(listado_ofertas, oferta)
     
-    conteo_empresas_ciudad = lt.size(empresas_ciudad)
-
+    conteo_empresas_ciudad = len(dict_city)
     llave_menor = min(dict_company_name, key=lambda k: dict_company_name[k])
     llave_mayor = max(dict_company_name, key=lambda k: dict_company_name[k])
     valor_menor = dict_company_name["llave_menor"]
@@ -324,7 +323,6 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     """
     Función que soluciona el requerimiento 7
     """
-    
     total_ofertas = 0
     dict_country_code = {}
     dict_city = {}
@@ -332,7 +330,6 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     dict_skills = {}
     dict_multilocations_ids = {}
     niveles_de_experticia = ['junior', 'mid', 'senior']
-    
     
 
     for oferta in lt.iterator(data_structs["jobs"]):
@@ -392,12 +389,6 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     return total_ofertas, conteo_ciudades_ofertas_pais, llave_mayor_country_code, valor_mayor_country,\
            llave_mayor_city, valor_mayor_city, 
 
-def req_8(data_structs):
-    '''
-    Función que soluciona el requerimiento 8
-    '''
-    # TODO: Realizar el requerimiento 8
-    pass
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 def cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final):

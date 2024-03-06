@@ -111,78 +111,85 @@ def req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
     Retorna el resultado del requerimiento 1
     """
-    # TODO: Modificar el requerimiento 1
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req_1(data_structs, n_ofertas, codigo_pais, nivel_experticia)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
 
 def req_2(control, n_ofertas, nombre_empresa, city):
     """
     Retorna el resultado del requerimiento 2
     """
-    # TODO: Modificar el requerimiento 2
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req_2(data_structs, n_ofertas, nombre_empresa, city)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
 
 def req_3(control, nombre_empresa, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 3
     """
-    # TODO: Modificar el requerimiento 3
+    start_time = get_time()
     data_structs = control['model']
     tupla_listado_ofertas = model.req_3(data_structs, nombre_empresa, fecha_inicial, fecha_final)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
 
 def req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 4
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req_4(data_structs, codigo_pais, fecha_inicial, fecha_final)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
-    
+
 def req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 5
     """
-    # TODO: Modificar el requerimiento 5
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
 
 def req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 6
     """
-    # TODO: Modificar el requerimiento 6
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ciudades = model.req_6(data_structs, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
-    return tupla_listado_ciudades
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ciudades
 
 
 def req_7(control, n_paises, fecha_inicial, fecha_final):
     """
     Retorna el resultado del requerimiento 7
     """
-    # TODO: Modificar el requerimiento 7
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req7(data_structs, n_paises, fecha_inicial, fecha_final)
-    return tupla_listado_ofertas
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return delta, tupla_listado_ofertas
 
-
-def req_8(control):
-    """
-    Retorna el resultado del requerimiento 8
-    """
-    # TODO: Modificar el requerimiento 8
-    pass
 
 # Funciones para medir tiempos de ejecucion
 

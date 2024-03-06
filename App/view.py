@@ -91,13 +91,12 @@ def print_jobs(control, pos, id):
 
     print(tabulate(headers, headers='keys'))
 
-
 def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
-
+    delta, tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El total de ofertas de trabajo ofrecidas según la condición {nivel_experticia} es {tupla_listado_ofertas[0]}.\n')
     print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
     headers = {'Fecha de publicación de la oferta': [],
@@ -128,8 +127,8 @@ def print_req_2(control, n_ofertas, nombre_empresa, city):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    tupla_listado_ofertas = controller.req_2(control, n_ofertas, nombre_empresa, city)
-
+    delta, tupla_listado_ofertas = controller.req_2(control, n_ofertas, nombre_empresa, city)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El total de ofertas ofrecidas por la empresa y ciudad es {tupla_listado_ofertas[0]}.\n')
     headers = {'Fecha de publicación': [],
                'Título de la oferta': [],
@@ -156,9 +155,8 @@ def print_req_3(control, nombre_empresa, fecha_inicial, fecha_final):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    tupla_listado_ofertas = controller.req_3(control, nombre_empresa, fecha_inicial, fecha_final)
-
+    delta, tupla_listado_ofertas = controller.req_3(control, nombre_empresa, fecha_inicial, fecha_final)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El número total de ofertas es {tupla_listado_ofertas[0]}.\n')
     print(f'El número total de ofertas con experticia junior es {tupla_listado_ofertas[3]}.\n')
     print(f'El número total de ofertas con experticia mid es {tupla_listado_ofertas[2]}.\n')
@@ -191,8 +189,8 @@ def print_req_4(control, codigo_pais, fecha_inicial, fecha_final):
     """
     Función que imprime la solución del Requerimiento 4 en consola
     """
-    tupla_listado_ofertas = controller.req_4(control, codigo_pais, fecha_inicial, fecha_final)
-
+    delta, tupla_listado_ofertas = controller.req_4(control, codigo_pais, fecha_inicial, fecha_final)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f"El total de ofertas en el país en el período de consulta es {tupla_listado_ofertas[0]}\n.")
     print(f"El total de empresas que publicaron al menos una oferta es {tupla_listado_ofertas[1]}\n.")
     print(f"El número total de ciudades del país en las que se publicaron ofertas es {tupla_listado_ofertas[2]}\n.")
@@ -225,18 +223,19 @@ def print_req_5(control, nombre_ciudad, fecha_inicial, fecha_final):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    tupla_listado_ofertas = controller.req_5(control, nombre_ciudad, fecha_inicial, fecha_final)
+    delta, tupla_listado_ofertas = controller.req_5(control, nombre_ciudad, fecha_inicial, fecha_final)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El número total de ofertas de una ciudad en un periodo es {tupla_listado_ofertas[0]}.\n')
     print(f'El número total de empresas que publicaron por lo menos una oferta en la ciudad de consulta es {tupla_listado_ofertas[1]}.\n')
-    print(f'La empresa con mayor número de ofertas y su conteo es {tupla_listado_ofertas[2][3]}.\n')
-    print(f'La empresa con mayor número de ofertas y su conteo es {tupla_listado_ofertas[4][5]}.\n')
+    print(f'La empresa con mayor número de ofertas es {tupla_listado_ofertas[2]} y su conteo es {tupla_listado_ofertas[3]}.\n')
+    print(f'La empresa con mayor número de ofertas es {tupla_listado_ofertas[4]} y su conteo es {tupla_listado_ofertas[5]}.\n')
     headers = {'Fecha de publicación': [],
                'Título de la oferta': [],
                'Nombre de la empresa que publica': [],
                'Tamaño de la empresa de la oferta': [],
                'Tipo de lugar de trabajo de la oferta': []}
     
-    for oferta in lt.iterator(tupla_listado_ofertas[4]):
+    for oferta in lt.iterator(tupla_listado_ofertas[6]):
         headers['Fecha de publicación'].append(oferta['published_at'])
         headers['Título de la oferta'].append(oferta['title'])
         headers['Nombre de la empresa que publica'].append(oferta['company_name'])
@@ -269,8 +268,7 @@ def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    
 
 
 def print_req_8(control):
@@ -306,10 +304,16 @@ if __name__ == "__main__":
             print_jobs(control, jobs_size-2, 3)
 
         elif int(inputs) == 2:
-            print_req_1(control)
+            n_ofertas = input('El número (N) de ofertas a listar: ')
+            codigo_pais = input('Código del país: ')
+            nivel_experticia = input('Nivel de experticia de las ofertas a consultar: ')
+            print_req_1(control, n_ofertas, codigo_pais, nivel_experticia)
 
         elif int(inputs) == 3:
-            print_req_2(control)
+            n_ofertas = input('El número (N) de ofertas a listar: ')
+            nombre_empresa = input('Nombre completo de la empresa a consultar: ')
+            city = input('Ciudad de la oferta: ')
+            print_req_2(control, n_ofertas, nombre_empresa, city)
 
         elif int(inputs) == 4:
             nombre_empresa = input('Nombre de la empresa: ')
@@ -324,18 +328,24 @@ if __name__ == "__main__":
             print_req_4(control, codigo_pais, fecha_inicial, fecha_final)
 
         elif int(inputs) == 6:
+            nombre_ciudad = input('Nombre de la ciudad: ')
+            fecha_final = input('La fecha inicial del periodo a consultar: ')
+            fecha_final = input('La fecha final del periodo a consultar: ')
+            print_req_5(control, nombre_ciudad, fecha_inicial, fecha_final)
+
+        elif int(inputs) == 7:
             n = input('Numero de ciudades para la consulta:')
             codigo_pais = input('Codigo del pais:')
             nivel_experticia = input('Nivel de experticia de las ofertas de interés:')
             fecha_inicial = input('Fecha inicial:')
             fecha_final = input('Fecha final:')
-            print_req_5(control,n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
-
-        elif int(inputs) == 7:
-            print_req_6(control)
+            print_req_6(control, n, codigo_pais, nivel_experticia, fecha_inicial, fecha_final)
 
         elif int(inputs) == 8:
-            print_req_7(control)
+            n_paises = input('El número (N) de países para consulta')
+            fecha_inicial = input('Fecha inicial:')
+            fecha_final = input('Fecha final:')
+            print_req_7(control, n_paises, fecha_inicial, fecha_final)
 
         elif int(inputs) == 9:
             print_req_8(control)
