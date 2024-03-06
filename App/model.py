@@ -232,23 +232,26 @@ def req_5(data_structs, nombre_ciudad, fecha_inicial, fecha_final):
     """
     ofertas_ciudad_y_periodo = 0
     dict_company_name = {}
-    empresas_ciudad = lt.newList('ARRAY_LIST')
+    dict_city = {}
     listado_ofertas=lt.newList("ARRAY_LIST")
     
     for oferta in lt.iterator(data_structs["jobs"]):
-        if nombre_ciudad == oferta["city"]:
-            if not lt.isPresent(empresas_ciudad, oferta['city']):
-                lt.addLast(empresas_ciudad, oferta['city'])
-            if oferta['company_name'] not in dict_company_name:
-                dict_company_name[oferta['company_name']] = 1
-            else:
-                dict_company_name[oferta['company_name']] += 1
-            esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
-            if esta_entre_fechas_inicial_y_final:
-                ofertas_ciudad_y_periodo += 1
-                lt.addLast(listado_ofertas, oferta)
+        if cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final):
+            if nombre_ciudad == oferta["city"]:
+                if oferta['city'] not in dict_city:
+                    dict_city[oferta['city']] = 1
+                else:
+                    dict_city[oferta['city']] += 1
+
+                if oferta['company_name'] not in dict_company_name:
+                    dict_company_name[oferta['company_name']] = 1
+                else:
+                    dict_company_name[oferta['company_name']] += 1
+                    ofertas_ciudad_y_periodo += 1
+                    lt.addLast(listado_ofertas, oferta)
     
     conteo_empresas_ciudad = lt.size(empresas_ciudad)
+
     llave_menor = min(dict_company_name, key=lambda k: dict_company_name[k])
     llave_mayor = max(dict_company_name, key=lambda k: dict_company_name[k])
     valor_menor = dict_company_name["llave_menor"]
@@ -325,18 +328,22 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     total_ofertas = 0
     dict_country_code = {}
     dict_city = {}
+    dict_company_name = {}
     dict_skills = {}
-    listado_ofertas = lt.newList('ARRAY_LIST')
+    dict_multilocations_ids = {}
+    niveles_de_experticia = ['junior', 'mid', 'senior']
+    
+    
 
     for oferta in lt.iterator(data_structs["jobs"]):
-        esta_entre_fechas_inicial_y_final = cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final)
-        if esta_entre_fechas_inicial_y_final:
-            if len(dict_country_code) <= n_paises:
+        if cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final):
+            if n_paises < len(dict_country_code):
                 if oferta['country_code'] not in dict_country_code:
                     dict_country_code[oferta['country_code']] = 1
+                    total_ofertas += 1
+
                 else:
                     dict_country_code[oferta['country_code']] += 1
-
                     total_ofertas += 1
 
                     if oferta["city"] not in dict_city:
@@ -344,14 +351,31 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
                     else:
                         dict_city[oferta["city"]] += 1
 
-                    for habilidad in lt.iterator(data_structs['skills']):
-                        if oferta['id'] == habilidad['id']:
-                            if habilidad["name"] not in dict_skills:
-                                dict_city[oferta["city"]] = 1
-                            else:
-                                dict_city[oferta["city"]] += 1
-                            
-    
+                        for nivel in niveles_de_experticia:
+                            if nivel == oferta['experience_level']:
+                                for habilidad in lt.iterator(data_structs['skills']):
+                                    if oferta['id'] == habilidad['id']:
+                                        if habilidad["name"] not in dict_skills:
+                                            dict_skills[habilidad["name"]] = 1
+                                        else:
+                                            dict_skills[habilidad["name"]] += 1
+
+                                        if oferta['company_name'] not in dict_company_name:
+                                                    dict_company_name[oferta['company_name']] = 1
+                                        else:
+                                            dict_company_name[oferta['company_name']] += 1
+
+                                        for multilocation in lt.iterator(data_structs['multilocations']):
+                                            if oferta['id'] == multilocation['id']:
+                                                if multilocation["id"] not in dict_multilocations_ids:
+                                                    dict_multilocations_ids[multilocation["id"]] = 1
+                                                else:
+                                                    dict_multilocations_ids[multilocation["id"]] += 1
+
+                                    
+                                            
+                                        
+                                        
     conteo_ciudades_ofertas_pais = len(dict_city)
     llave_mayor_country_code = max(dict_country_code, key=lambda k:dict_country_code[k])
     llave_mayor_city = max(dict_city, key=lambda k:dict_city[k])
@@ -363,7 +387,10 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     valor_mayor_skills = dict_skills[llave_mayor_skills]
     valor_menor_skills = dict_skills[llave_menor_skills]
 
-    promedio_nivel_skills = sum(dict_skills.values())/len(dict_skills)
+    promedio_nivel_skills = sum(dict_skills.values())//len(dict_skills)
+
+    return total_ofertas, conteo_ciudades_ofertas_pais, llave_mayor_country_code, valor_mayor_country,\
+           llave_mayor_city, valor_mayor_city, 
 
 def req_8(data_structs):
     '''
@@ -378,7 +405,7 @@ def cmp_entre_fechas_inicial_y_final(fecha_inicial, oferta, fecha_final):
 
 def cmp_fechas(oferta1, oferta2):
     return (oferta1['published_at'][0:10] < oferta2['published_at'][0:10])
-        
+
 def cmp_ofertas_by_fecha_y_codigo_pais(oferta1, oferta2):
     """
     Devuelve verdadero (True) si la fecha de publicación de la oferta1 es menor que en la
