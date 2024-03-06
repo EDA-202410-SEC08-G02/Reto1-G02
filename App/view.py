@@ -96,7 +96,7 @@ def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
+    delta, tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
 
     print(f'El total de ofertas de trabajo ofrecidas según la condición {nivel_experticia} es {tupla_listado_ofertas[0]}.\n')
     print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
@@ -121,8 +121,9 @@ def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
         headers['Tamaño de la empresa de la oferta'].append(oferta['company_size'])
         headers['Tipo de ubicación de trabajo'].append(oferta['workplace_type'])
         headers['Disponible a contratar ucranianos'].append(oferta['open_to_hire_ukrainians'])
-
+    
     print(tabulate(headers, headers='keys'))
+    print(delta)
 
 def print_req_2(control, n_ofertas, nombre_empresa, city):
     """
