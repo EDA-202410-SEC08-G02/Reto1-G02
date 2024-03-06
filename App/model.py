@@ -368,11 +368,7 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
                                                     dict_multilocations_ids[multilocation["id"]] = 1
                                                 else:
                                                     dict_multilocations_ids[multilocation["id"]] += 1
-
-                                    
-                                            
-                                        
-                                        
+                                   
     conteo_ciudades_ofertas_pais = len(dict_city)
     llave_mayor_country_code = max(dict_country_code, key=lambda k:dict_country_code[k])
     llave_mayor_city = max(dict_city, key=lambda k:dict_city[k])
@@ -387,7 +383,7 @@ def req_7(data_structs, n_paises, fecha_inicial, fecha_final):
     promedio_nivel_skills = sum(dict_skills.values())//len(dict_skills)
 
     return total_ofertas, conteo_ciudades_ofertas_pais, llave_mayor_country_code, valor_mayor_country,\
-           llave_mayor_city, valor_mayor_city, 
+           llave_mayor_city, valor_mayor_city, llave_mayor_skills, valor_mayor_skills,llave_menor_skills, valor_menor_skills, promedio_nivel_skills
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista

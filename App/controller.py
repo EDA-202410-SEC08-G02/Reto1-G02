@@ -112,12 +112,17 @@ def req_1(control, n_ofertas, codigo_pais, nivel_experticia):
     Retorna el resultado del requerimiento 1
     """
     start_time = get_time()
+    # TODO: Modificar el requerimiento 1
+    start_time = get_time()
     data_structs = control["model"]
     tupla_listado_ofertas = model.req_1(data_structs, n_ofertas, codigo_pais, nivel_experticia)
     stop_time = get_time()
     delta = delta_time(start_time, stop_time)
     return delta, tupla_listado_ofertas
 
+    stop_time = get_time()
+    delta = delta_time(start_time, stop_time)
+    return tupla_listado_ofertas, delta
 
 def req_2(control, n_ofertas, nombre_empresa, city):
     """
