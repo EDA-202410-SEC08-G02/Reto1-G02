@@ -96,8 +96,7 @@ def print_req_1(control, n_ofertas, codigo_pais, nivel_experticia):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     delta, tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
-
-    delta, tupla_listado_ofertas = controller.req_1(control, n_ofertas, codigo_pais, nivel_experticia)
+    print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print("Para", size, "elementos, el tiempo es:", str(delta), "[ms]")
     print(f'El total de ofertas de trabajo ofrecidas según la condición {nivel_experticia} es {tupla_listado_ofertas[0]}.\n')
     print(f"Listado de ofertas publicadas ordenados cronológicamente:\n")
